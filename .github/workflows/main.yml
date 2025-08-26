@@ -1,11 +1,11 @@
 name: Generate GitHub Stats
 
 on:
+  push:
+    branches: [ "main" ]
   schedule:
     - cron: "0 * * * *"   # run every hour
   workflow_dispatch:       # allow manual run
-  push:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -14,13 +14,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Create folder
+        run: mkdir -p generated
+
       - name: Generate Overview
         run: |
-          curl -o generated/overview.svg "https://github-readme-stats.vercel.app/api?username=QuanHoangNgoc&show_icons=true&theme=default&count_private=true&include_all_commits=false"
+          curl -s -L "https://github-readme-stats.vercel.app/api?username=QuanHoangNgoc&show_icons=true&theme=default&count_private=true&include_all_commits=false" -o generated/overview.svg
       
       - name: Generate Languages
         run: |
-          curl -o generated/languages.svg "https://github-readme-stats.vercel.app/api/top-langs/?username=QuanHoangNgoc&layout=compact&langs_count=10"
+          curl -s -L "https://github-readme-stats.vercel.app/api/top-langs/?username=QuanHoangNgoc&layout=compact&langs_count=10" -o generated/languages.svg
       
       - name: Commit and Push
         run: |
