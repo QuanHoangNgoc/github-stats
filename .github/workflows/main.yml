@@ -1,0 +1,54 @@
+name: Generate Animation
+
+on:
+  # Run automatically every 24 hours
+  schedule:
+    - cron: "0 0 * * *"  # every day at midnight UTC
+
+  # Allows manual trigger
+  workflow_dispatch:
+
+  # Run on every push to the main branch
+  push:
+    branches:
+      - main
+
+jobs:
+  generate:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # updated LTS version
+
+      # 3️⃣ Install dependencies
+      - name: Install Node.js dependencies
+        run: npm install canvas
+
+      # 4️⃣ Generate the snake animation from GitHub contributions
+      - name: Generate snake game SVG
+        uses: Platane/snk@v3.2.0
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+
+      # 5️⃣ Push generated files to output branch
+      - name: Deploy to output branch
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
