@@ -5,7 +5,10 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: "0 * * * *"   # run every hour
-  workflow_dispatch:       # allow manual run
+  workflow_dispatch:
+
+permissions:
+  contents: write   # <-- this is the fix
 
 jobs:
   build:
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # we’ll set our own credentials
 
       - name: Create folder
         run: mkdir -p generated
@@ -24,7 +29,7 @@ jobs:
       - name: Generate Languages
         run: |
           curl -s -L "https://github-readme-stats.vercel.app/api/top-langs/?username=QuanHoangNgoc&layout=compact&langs_count=10" -o generated/languages.svg
-      
+
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
@@ -32,3 +37,5 @@ jobs:
           git add generated/*.svg
           git commit -m "Update generated stats" || echo "No changes to commit"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
