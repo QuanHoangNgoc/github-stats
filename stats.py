@@ -18,10 +18,21 @@ repos = []
 page = 1
 while True:
     url = f"https://api.github.com/user/repos?per_page=100&page={page}"
-    r = requests.get(url, headers=headers).json()
-    if not r:
+    r = requests.get(url, headers=headers)
+
+    if r.status_code != 200:
+        print("Error fetching repos:", r.json())
         break
-    repos.extend(r)
+
+    data = r.json()
+    if not isinstance(data, list):  # when API returns an error dict
+        print("Unexpected response:", data)
+        break
+
+    if not data:
+        break
+
+    repos.extend(data)
     page += 1
     if page >= 10:
         break
@@ -29,7 +40,7 @@ while True:
 # Filter: repos owned by me (not forks)
 repos = [
     repo for repo in repos
-    if repo["owner"]["login"] == username and not repo["fork"]
+    if repo.get("owner", {}).get("login") == username and not repo.get("fork", False)
 ]
 print(f"Fetched {len(repos)} repositories.")
 
