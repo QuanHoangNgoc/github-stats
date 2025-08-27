@@ -6,7 +6,7 @@ on:
   workflow_dispatch:       # allow manual run
   push:
     paths:
-      - ".github/workflows/stats.yml"   # run only if this workflow file changes
+      - ".github/workflows/github_repo_stats.yml"   # ! run only if this workflow file changes
 
 jobs:
   run-stats:
