@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 0 * * *"   # run every day at midnight UTC
   workflow_dispatch:       # allow manual run
+  push:
+    paths:
+      - ".github/workflows/stats.yml"   # run only if this workflow file changes
 
 jobs:
   run-stats:
