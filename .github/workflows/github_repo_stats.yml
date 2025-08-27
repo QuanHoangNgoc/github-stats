@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - ".github/workflows/github_repo_stats.yml"   # run only if this workflow file changes
+      - "stats.py"
 
 jobs:
   run-stats:
