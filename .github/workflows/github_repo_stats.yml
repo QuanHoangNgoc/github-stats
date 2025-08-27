@@ -6,7 +6,7 @@ on:
   workflow_dispatch:       # allow manual run
   push:
     paths:
-      - ".github/workflows/github_repo_stats.yml"   # ! run only if this workflow file changes
+      - ".github/workflows/github_repo_stats.yml"   # run only if this workflow file changes
 
 jobs:
   run-stats:
@@ -14,27 +14,26 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4   # ✅ updated to v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5   # ✅ updated to v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies # Install: oke 
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests matplotlib
 
-      - name: Run stats script # Run py 
+      - name: Run stats script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_USERNAME: QuanHoangNgoc
-        run: |
-          python stats.py
+        run: python stats.py
 
       - name: Upload plots as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   # ✅ updated to v4
         with:
           name: github-repo-stats
           path: github_repo_stats_subplots.png
