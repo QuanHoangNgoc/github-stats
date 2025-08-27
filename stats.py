@@ -17,7 +17,8 @@ headers = {"Authorization": f"token {token}"}
 repos = []
 page = 1
 while True:
-    url = f"https://api.github.com/user/repos?per_page=100&page={page}"
+    # url = f"https://api.github.com/user/repos?per_page=100&page={page}"
+    url = f"https://api.github.com/users/{username}/repos?per_page=100&page={page}"
     r = requests.get(url, headers=headers)
 
     if r.status_code != 200:
