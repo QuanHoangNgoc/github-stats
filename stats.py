@@ -43,6 +43,7 @@ repos.sort(key=lambda r: r["pushed_at"])   # ascending
 # ----------------------------------------------------------------------------
 # Collect stats
 stars, forks, commits, views = [], [], [], []
+clones = [] 
 d = 0
 
 for repo in repos:
@@ -69,11 +70,20 @@ for repo in repos:
     except:
         views.append(0)
 
+    # Clones (last 14 days)
+    clones_url = f"https://api.github.com/repos/{username}/{repo['name']}/traffic/clones"
+    try:
+        clones_data = requests.get(clones_url, headers=headers).json()
+        clones.append(clones_data.get("count", 0))
+    except:
+        clones.append(0)
+
 
 # ----------------------------------------------------------------------------
 # Plot 4 subplots (2x2 grid)
 fig, axs = plt.subplots(2, 2, figsize=(12, 8), sharex=True)
 
+forks = clones.copy() 
 acc_stars = [sum(stars[:i+1]) for i in range(len(stars))]
 acc_commits = [sum(commits[:i+1]) for i in range(len(commits))]
 acc_forks = [sum(forks[:i+1]) for i in range(len(forks))]
@@ -97,7 +107,7 @@ plot_with_last(axs[0, 0], acc_stars, "gold", "Stars")
 plot_with_last(axs[0, 1], acc_commits, "steelblue", "Commits")
 
 # Forks
-plot_with_last(axs[1, 0], acc_forks, "orange", "Forks")
+plot_with_last(axs[1, 0], acc_forks, "orange", "Clones (last 14 days)")
 
 # Views
 plot_with_last(axs[1, 1], acc_views, "green", "Views (last 14 days)")
