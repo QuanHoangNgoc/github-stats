@@ -1,0 +1,37 @@
+name: GitHub Repo Stats
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # run every day at midnight UTC
+  workflow_dispatch:       # allow manual run
+
+jobs:
+  run-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies # Install: oke 
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests matplotlib
+
+      - name: Run stats script # Run py 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: QuanHoangNgoc
+        run: |
+          python stats.py
+
+      - name: Upload plots as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-repo-stats
+          path: github_repo_stats_subplots.png
