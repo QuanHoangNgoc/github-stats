@@ -29,7 +29,7 @@ jobs:
 
       - name: Run stats script #! Set up the key and run py 
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} # ! Change from secrets.GITHUB_TOKEN to access to private 
           GH_USERNAME: QuanHoangNgoc
         run: python stats.py
 
