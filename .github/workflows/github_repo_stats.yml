@@ -27,9 +27,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests matplotlib
 
-      - name: Run stats script
+      - name: Run stats script #! Set up the key and run py 
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           GH_USERNAME: QuanHoangNgoc
         run: python stats.py
 
