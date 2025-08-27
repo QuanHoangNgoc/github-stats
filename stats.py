@@ -94,7 +94,7 @@ def plot_with_last(ax, data, color, title):
 plot_with_last(axs[0, 0], acc_stars, "gold", "Stars")
 
 # Commits
-plot_with_last(axs[0, 1], commits, "steelblue", "Commits")
+plot_with_last(axs[0, 1], acc_commits, "steelblue", "Commits")
 
 # Forks
 plot_with_last(axs[1, 0], acc_forks, "orange", "Forks")
