@@ -2,7 +2,7 @@ name: GitHub Repo Stats
 
 on:
   schedule:
-    - cron: "0 */3 * * *"   # run every day at midnight UTC
+    - cron: "0 */8 * * *"   # run every day at midnight UTC
   workflow_dispatch:       # allow manual run
   push:
     paths:
